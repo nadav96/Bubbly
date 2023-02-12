@@ -20,7 +20,7 @@ class CircleView: UIView {
         self.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         self.radius = 50//CGFloat(arc4random_uniform(10)*10+10)
         self.colorIndex = Int(arc4random_uniform(4))
-        self.frame.size = CGSize(width: self.radius, height: self.radius)
+        self.frame.size = CGSize(width: self.radius*2, height: self.radius*2)
         
         print(self.colorIndex, self.radius)
         self.backgroundColor = .red
