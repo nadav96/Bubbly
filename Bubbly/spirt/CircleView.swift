@@ -25,6 +25,7 @@ class CircleView: UIView {
         self.clipsToBounds = true
         
         self.setupCircle()
+        self.setupArrow()
     }
     
     private func setupCircle() {
@@ -37,4 +38,30 @@ class CircleView: UIView {
         
         layer.addSublayer(shapeLayer)
     }
+    
+    private func setupArrow() {
+          // Generate random arrow width and direction
+          let arrowWidth = CGFloat.random(in: 10...bounds.width/2)
+          let arrowDirection = CGFloat.random(in: 0...360)
+          
+          let arrowPath = UIBezierPath()
+          arrowPath.move(to: CGPoint(x: bounds.width/2, y: bounds.height/2))
+          arrowPath.addLine(to: CGPoint(x: bounds.width/2 + arrowWidth, y: bounds.height/2))
+          arrowPath.addLine(to: CGPoint(x: bounds.width/2 + arrowWidth/2, y: bounds.height/2 - arrowWidth/2))
+          arrowPath.addLine(to: CGPoint(x: bounds.width/2 + arrowWidth/2, y: bounds.height/2 + arrowWidth/2))
+          arrowPath.addLine(to: CGPoint(x: bounds.width/2 + arrowWidth, y: bounds.height/2))
+          
+          let arrowLayer = CAShapeLayer()
+          arrowLayer.path = arrowPath.cgPath
+          arrowLayer.fillColor = UIColor.clear.cgColor
+          arrowLayer.strokeColor = UIColor.black.cgColor
+          arrowLayer.lineWidth = 2.0
+          arrowLayer.lineCap = .round
+          arrowLayer.lineJoin = .round
+          
+          // Rotate the arrow layer to point in the random direction
+          arrowLayer.transform = CATransform3DMakeRotation(arrowDirection * CGFloat.pi / 180, 0, 0, 1)
+          
+          layer.addSublayer(arrowLayer)
+      }
 }
