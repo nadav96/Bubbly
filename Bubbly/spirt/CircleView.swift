@@ -37,7 +37,6 @@ class CircleView: UIView {
         self.clipsToBounds = false
         
         self.setupCircle()
-//        self.setupArrow()
         
         self.v = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
         v.backgroundColor = .black
@@ -80,28 +79,6 @@ class CircleView: UIView {
         layer.addSublayer(shapeLayer)
     }
     
-    private func setupArrow() {
-        let arrow = UIBezierPath()
-        let startTouchPoint = CGPoint(x: self.frame.origin.x + 30, y: self.frame.origin.y + 30) //CGPoint(x: 200, y: 200)
-        let secondTouchPoint = CGPoint(x: self.frame.origin.x + 100, y: self.frame.origin.x + 100)  //CGPoint(x: 50, y: 50)
-        arrow.addArrow(start: startTouchPoint, end: secondTouchPoint, pointerLineLength: 20, arrowAngle: CGFloat(Double.pi / 5))
-
-        let arrowLayer = CAShapeLayer()
-        let path = CGMutablePath()
-        arrowLayer.strokeColor = UIColor.black.cgColor
-//        arrowLayer.lineDashPattern = [7, 6]
-        arrowLayer.lineWidth = 2
-        path.addPath(arrow.cgPath)
-        path.addLines(between: [startTouchPoint, secondTouchPoint])
-        arrowLayer.path = path
-
-        arrowLayer.fillColor = UIColor.clear.cgColor
-        arrowLayer.lineJoin = CAShapeLayerLineJoin.round
-        arrowLayer.lineCap = CAShapeLayerLineCap.round
-
-        self.layer.addSublayer(arrowLayer)
-    }
-    
     func animateViewInLine(_ view: UIView, angle: CGFloat, speed: CGFloat) {
         let distancePerStep = speed // You can adjust the factor to change the distance moved per step
         var origin = view.frame.origin
@@ -120,21 +97,6 @@ class CircleView: UIView {
     }
 
 
-}
-
-extension UIBezierPath {
-    func addArrow(start: CGPoint, end: CGPoint, pointerLineLength: CGFloat, arrowAngle: CGFloat) {
-        self.move(to: start)
-        self.addLine(to: end)
-
-        let startEndAngle = atan((end.y - start.y) / (end.x - start.x)) + ((end.x - start.x) < 0 ? CGFloat(Double.pi) : 0)
-        let arrowLine1 = CGPoint(x: end.x + pointerLineLength * cos(CGFloat(Double.pi) - startEndAngle + arrowAngle), y: end.y - pointerLineLength * sin(CGFloat(Double.pi) - startEndAngle + arrowAngle))
-        let arrowLine2 = CGPoint(x: end.x + pointerLineLength * cos(CGFloat(Double.pi) - startEndAngle - arrowAngle), y: end.y - pointerLineLength * sin(CGFloat(Double.pi) - startEndAngle - arrowAngle))
-
-        self.addLine(to: arrowLine1)
-        self.move(to: end)
-        self.addLine(to: arrowLine2)
-    }
 }
 
 extension CGPoint {

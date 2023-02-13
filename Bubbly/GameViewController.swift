@@ -12,7 +12,9 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        for i in 0...10 {
+        let numberOfCircles = 10
+        
+        for _ in 0..<numberOfCircles {
             let circle = CircleView(radius: 50, color: nil)
             view.addSubview(circle)
             circle.frame.origin = CGPoint.random(in: self.view.bounds)
