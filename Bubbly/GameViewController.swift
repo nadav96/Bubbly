@@ -8,20 +8,30 @@
 import UIKit
 
 class GameViewController: UIViewController {
-    var circle: UIView!
+    var circles: [CircleView] = []
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        self.circle = CircleView()
-//        self.circle.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-
-        self.view.addSubview(self.circle)
+        
+        for i in 0...10 {
+            let circle = CircleView()
+            view.addSubview(circle)
+            circle.frame.origin = CGPoint.random(in: self.view.bounds)
+            let randomAngle = Double.random(in: 0...(2 * .pi))
+            circle.go(angle: randomAngle, radius: 3)
+        }
     }
-    
+   
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.circle?.frame.origin = self.view.center
+        
     }
 }
 
+extension CGPoint {
+    static func random(in rect: CGRect) -> CGPoint {
+        let x = CGFloat(Double.random(in: Double(rect.minX)...Double(rect.maxX)))
+        let y = CGFloat(Double.random(in: Double(rect.minY)...Double(rect.maxY)))
+        return CGPoint(x: x, y: y)
+    }
+}

@@ -15,6 +15,8 @@ class CircleView: UIView {
     var v: UIView!
     var v2: UIView!
     
+    var directionAngle: CGFloat = 0.0
+    var directionSpeed: CGFloat = 0.0
     
     convenience init() {
         self.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -43,18 +45,22 @@ class CircleView: UIView {
         print("SA: \(self.center)")
     }
     
+    func go(angle: CGFloat, radius: CGFloat) {
+        self.directionAngle = angle
+        self.directionSpeed = radius
+        animateViewInLine(self, angle: angle, speed: radius)
+    }
+    
     override func layoutSubviews() {
         self.v.frame.origin = CGPoint(x: self.frame.width/2 - 5, y: self.frame.height/2 - 5)
         
-        let a = calculateArrowStartingPoint(alpha: .pi/2)
-        print(a)
-        self.v2.frame.origin = calculateArrowStartingPoint(alpha: .pi/4) + self.v.center + CGPoint(x: -5, y: -5)
+        self.v2.frame.origin = polar(alpha: self.directionAngle, radius: self.radius, offset: self.v.center + CGPoint(x: -5, y: -5))
     }
     
-    private func calculateArrowStartingPoint(alpha: CGFloat) -> CGPoint {
-        let x = cos(alpha) * self.radius
-        let y = -sin(alpha) * self.radius
-        return CGPoint(x: x, y: y)
+    private func polar(alpha: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
+        let x = cos(alpha) * radius
+        let y = -sin(alpha) * radius
+        return CGPoint(x: x, y: y) + offset
     }
     
     private func setupCircle() {
@@ -89,6 +95,24 @@ class CircleView: UIView {
 
         self.layer.addSublayer(arrowLayer)
     }
+    
+    func animateViewInLine(_ view: UIView, angle: CGFloat, speed: CGFloat) {
+        let distancePerStep = speed // You can adjust the factor to change the distance moved per step
+        var origin = view.frame.origin
+        let dx = distancePerStep * cos(angle)
+        let dy = -distancePerStep * sin(angle)
+        let animationDuration = 0.1
+        UIView.animate(withDuration: animationDuration, animations: {
+            origin.x += dx
+            origin.y += dy
+            view.frame.origin = origin
+        }, completion: { finished in
+            if finished {
+                self.animateViewInLine(view, angle: angle, speed: speed)
+            }
+        })
+    }
+
 
 }
 
