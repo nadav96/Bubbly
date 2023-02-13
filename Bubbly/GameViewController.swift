@@ -13,7 +13,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         for i in 0...10 {
-            let circle = CircleView()
+            let circle = CircleView(radius: 50, color: nil)
             view.addSubview(circle)
             circle.frame.origin = CGPoint.random(in: self.view.bounds)
             let randomAngle = Double.random(in: 0...(2 * .pi))
