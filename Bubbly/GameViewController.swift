@@ -8,6 +8,8 @@
 import UIKit
 
 class GameViewController: UIViewController {
+    let MAX_CIRCLE_CREATION_ATTEMPTS = 30
+    
     let numberOfCircles = 10
     
     var circles: [CircleView] = []
@@ -57,11 +59,21 @@ class GameViewController: UIViewController {
             
             let circle = Circle(radius: randomRadius, vector: Vector.random())
             
+            var i = 0
             repeat {
+                i += 1
                 circle.moveCenterAtRandom(bounds: bounds)
-            } while circle.collision(others: circles)
+            } while circle.collision(others: circles) && i < MAX_CIRCLE_CREATION_ATTEMPTS
             
-            circles.append(circle)
+            if i >= MAX_CIRCLE_CREATION_ATTEMPTS {
+                // try next attmpet, with different radius
+                print("ERR")
+            }
+            else {
+                circles.append(circle)
+            }
+            
+            
         }
         
         return circles
@@ -75,7 +87,7 @@ class GameViewController: UIViewController {
         if elapsedTime > targetFrameDuration {
             lastFrameTime = currentTime
             updateGameState()
-            render()
+//            render()
         }
         
     }
