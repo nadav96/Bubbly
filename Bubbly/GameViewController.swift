@@ -101,7 +101,9 @@ class GameViewController: UIViewController {
         // Render the game graphics here
         
         for circle in circles {
-            circle.render()
+            if !circle.circle.collision(bounds: self.bounds) {
+                circle.render()
+            }
         }
     }
    

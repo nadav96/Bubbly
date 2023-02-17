@@ -25,6 +25,16 @@ class Circle {
         self.center = CGPoint.random(in: bounds, radius: 2 * self.radius)
     }
     
+    func move() {
+        let distancePerFrame = self.vector.length / 60
+        
+        let dx = distancePerFrame * cos(self.vector.angle)
+        let dy = -distancePerFrame * sin(self.vector.angle)
+        
+        center.x += dx
+        center.y += dy
+    }
+    
     func collision(others: [Circle], spacing: CGFloat = 20) -> Bool {
         var overlaps = false
         
@@ -38,5 +48,9 @@ class Circle {
         }
 
         return overlaps
+    }
+    
+    func collision(bounds: CGRect) -> Bool {
+        return !bounds.contains(self.center)
     }
 }

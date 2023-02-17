@@ -66,16 +66,10 @@ class CircleView: UIView {
         layer.addSublayer(shapeLayer)
     }
     
-    func render() {
-        let distancePerFrame = self.circle.vector.length / 60
-        
-        var origin = self.frame.origin
-        let dx = distancePerFrame * cos(self.circle.vector.angle)
-        let dy = -distancePerFrame * sin(self.circle.vector.angle)
-        
-        origin.x += dx
-        origin.y += dy
-        self.frame.origin = origin
+    func render() {        
+        self.circle.move()
+
+        self.frame.origin = self.circle.center
     }
 
     func drawArrow(from: CGPoint, angle: CGFloat, velocity: CGFloat) {
