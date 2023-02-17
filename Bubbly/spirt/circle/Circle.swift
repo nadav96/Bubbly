@@ -97,6 +97,18 @@ class Circle {
     }
     
     func bounce(bounds: CGRect) {
-        self.vector = -self.vector
+        guard let normal = self.intersections(bounds: bounds).first?.normal() else {
+            return
+        }
+        
+        let (nx, ny) = normal.cartesian()
+        let (x, y) = self.vector.cartesian()
+        
+        let dot = nx * x + ny * y
+        let rx = x - 2 * dot * nx
+        let ry = y - 2 * dot * ny
+        
+        self.vector = Vector(x: rx, y: ry)
+        
     }
 }

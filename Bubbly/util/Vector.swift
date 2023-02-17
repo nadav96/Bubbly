@@ -18,6 +18,11 @@ class Vector {
         self.length = length
     }
     
+    init(x: CGFloat, y: CGFloat) {
+        self.length = sqrt(pow(x, 2) + pow(y, 2))
+        self.angle = atan2(y, x)
+    }
+    
     static func random() -> Vector {
         let randomAngle = CGFloat.random(in: 0...(2 * .pi))
         // TODO: 80.0 -> CGFloat.random(in: 10...(100))
@@ -29,7 +34,21 @@ class Vector {
         return Vector(angle: angle + .pi, length: length)
     }
     
+    func cartesian() -> (CGFloat, CGFloat) {
+        return (self.length * cos(self.angle), self.length * sin(self.angle))
+    }
+    
+    // MARK: overloads
+    
     static prefix func - (vector: Vector) -> Vector {
         return Vector(angle: vector.angle + .pi, length: vector.length)
+    }
+    
+    static func * (v1: Vector, v2: Vector) -> Vector {
+        return Vector(angle: v1.angle - v2.angle, length: v1.length * v2.length)
+    }
+    
+    static func * (scalar: CGFloat, v: Vector) -> Vector {
+        return Vector(angle: v.angle, length: v.length * scalar)
     }
 }

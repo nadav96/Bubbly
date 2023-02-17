@@ -10,7 +10,7 @@ import UIKit
 class GameViewController: UIViewController {
     let MAX_CIRCLE_CREATION_ATTEMPTS = 30
     
-    let numberOfCircles = 1
+    let numberOfCircles = 10
     
     var circles: [CircleView] = []
     var bounds: CGRect = .zero
