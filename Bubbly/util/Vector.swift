@@ -20,7 +20,8 @@ class Vector {
     
     static func random() -> Vector {
         let randomAngle = CGFloat.random(in: 0...(2 * .pi))
-        let randomLength = CGFloat.random(in: 10...(100))
+        // TODO: 80.0 -> CGFloat.random(in: 10...(100))
+        let randomLength = 80.0
         return Vector(angle: randomAngle, length: randomLength)
     }
 
