@@ -8,6 +8,9 @@
 import UIKit
 
 class GameViewController: UIViewController {
+    private var startTime: Date?
+    private var timer: Timer?
+    
     let MAX_CIRCLE_CREATION_ATTEMPTS = 30
     
     let numberOfCircles = 4
@@ -26,6 +29,8 @@ class GameViewController: UIViewController {
     @IBOutlet weak var countdownLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
     
+    var frames: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setBounds()
@@ -37,12 +42,29 @@ class GameViewController: UIViewController {
     }
     
     func start() {
+        startTime = Date()
+        
         displayLink = CADisplayLink(target: self, selector: #selector(gameLoop))
         displayLink?.add(to: .current, forMode: .default)
     }
     
     func stop() {
+        timer?.invalidate()
         self.displayLink?.invalidate()
+    }
+    
+    func updateTime() {
+        guard let startTime = self.startTime else {
+            return
+        }
+        let elapsedTime = Date().timeIntervalSince(startTime)
+        let formatter = DateComponentsFormatter()
+        formatter.zeroFormattingBehavior = .pad
+        formatter.allowedUnits = [.minute, .second, .nanosecond]
+        formatter.unitsStyle = .positional
+        if let formattedString = formatter.string(from: elapsedTime) {
+            self.durationLabel.text = formattedString
+        }
     }
     
     private func setBounds() {
@@ -50,8 +72,8 @@ class GameViewController: UIViewController {
         self.bounds = self.gameContainerView.frame
         self.boundsView = UIView(frame: self.gameContainerView.bounds)
         self.gameContainerView.addSubview(self.boundsView)
-        self.boundsView.backgroundColor = .red
-        self.boundsView.alpha = 0.5
+//        self.boundsView.backgroundColor = .red
+//        self.boundsView.alpha = 0.5
         
     }
     
@@ -61,8 +83,6 @@ class GameViewController: UIViewController {
             view.addSubview(c)
             
             self.circles.append(c)
-            
-            
         }
     }
     
@@ -99,7 +119,10 @@ class GameViewController: UIViewController {
     @objc func gameLoop(_ displayLink: CADisplayLink) {
         if !isGameRunning {
             self.stop()
+            return
         }
+        
+        updateTime()
 
         let currentTime = displayLink.timestamp
         let elapsedTime = currentTime - lastFrameTime
