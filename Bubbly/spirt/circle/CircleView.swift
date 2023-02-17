@@ -40,13 +40,12 @@ class CircleView: UIView {
         v.backgroundColor = .black
         self.v.layer.cornerRadius = 5
         self.addSubview(v)
+        self.v.isHidden = true
     }
     
     
     override func layoutSubviews() {
         self.v.frame.origin = CGPoint(x: self.frame.width/2 - 5, y: self.frame.height/2 - 5)
-        
-        drawArrow(from: self.v.frame.origin + CGPoint(x: 5, y: 5), angle: self.circle.vector.angle, velocity: self.circle.vector.length)
     }
     
     private func polar(alpha: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
