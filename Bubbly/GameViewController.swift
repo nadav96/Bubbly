@@ -22,6 +22,10 @@ class GameViewController: UIViewController {
     
     var isGameRunning = true
     
+    @IBOutlet weak var gameContainerView: UIView!
+    @IBOutlet weak var countdownLabel: UILabel!
+    @IBOutlet weak var durationLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setBounds()
@@ -42,9 +46,10 @@ class GameViewController: UIViewController {
     }
     
     private func setBounds() {
-        self.bounds = self.view.bounds.decreaseEqually(by: 60)
-        self.boundsView = UIView(frame: self.bounds)
-        self.view.addSubview(self.boundsView)
+        // TODO: need to fix bounds so it will be controllable (if we want to resize the bounds mid fly)
+        self.bounds = self.gameContainerView.frame
+        self.boundsView = UIView(frame: self.gameContainerView.bounds)
+        self.gameContainerView.addSubview(self.boundsView)
         self.boundsView.backgroundColor = .red
         self.boundsView.alpha = 0.5
         
