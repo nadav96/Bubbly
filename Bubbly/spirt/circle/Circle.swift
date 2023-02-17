@@ -88,11 +88,6 @@ class Circle {
     func collision(bounds: CGRect) -> Bool {
         let inter = intersections(bounds: bounds)
         
-        // TODO: remove block
-        if inter.count > 0 {
-            print(inter)
-        }
-        
         return inter.count > 0
     }
     

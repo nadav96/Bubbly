@@ -41,8 +41,24 @@ class CircleView: UIView {
         self.v.layer.cornerRadius = 5
         self.addSubview(v)
         self.v.isHidden = true
+        
+        setupTapGesture()
     }
     
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
+        // Handle the tap here
+        print("Circle tapped!")
+        
+        self.colorIndex = (self.colorIndex + 1) % self.COLORS.count
+        self.color = self.COLORS[self.colorIndex]
+        
+        self.setupCircle()
+    }
     
     override func layoutSubviews() {
         self.v.frame.origin = CGPoint(x: self.frame.width/2 - 5, y: self.frame.height/2 - 5)
