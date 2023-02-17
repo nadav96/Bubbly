@@ -9,6 +9,11 @@ import UIKit
 
 class GameViewController: UIViewController {
     var circles: [CircleView] = []
+    
+    var displayLink: CADisplayLink?
+    var lastFrameTime: CFTimeInterval = 0.0
+    let targetFrameDuration = 1.0 / 60.0 // 60fps
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -16,14 +21,41 @@ class GameViewController: UIViewController {
         
         for _ in 0..<numberOfCircles {
             let randomRadius = Double.random(in: 10...50)
-            let randomAngle = Double.random(in: 0...(2 * .pi))
-            let randomVelocity = Double.random(in: 1...(5))
             let randomStartingPoint = CGPoint.random(in: self.view.bounds)
+            let randomVector = Vector.random()
             
-            let circle = CircleView(radius: randomRadius, color: nil)
+            let circle = CircleView(radius: randomRadius, startVector: randomVector, startOrigin: randomStartingPoint)
             view.addSubview(circle)
             circle.frame.origin = randomStartingPoint
-            circle.go(angle: randomAngle, velocity: randomVelocity)
+            
+            self.circles.append(circle)
+        }
+        
+        displayLink = CADisplayLink(target: self, selector: #selector(gameLoop))
+        displayLink?.add(to: .current, forMode: .default)
+    }
+    
+    @objc func gameLoop(_ displayLink: CADisplayLink) {
+        let currentTime = displayLink.timestamp
+        let elapsedTime = currentTime - lastFrameTime
+
+        if elapsedTime > targetFrameDuration {
+            lastFrameTime = currentTime
+            updateGameState()
+            render()
+        }
+        
+    }
+    
+    func updateGameState() {
+        
+    }
+
+    func render() {
+        // Render the game graphics here
+        
+        for circle in circles {
+            circle.render()
         }
     }
    

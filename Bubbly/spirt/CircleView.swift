@@ -8,6 +8,8 @@
 import UIKit
 
 class CircleView: UIView {
+    var directionVector: Vector = .zero
+    
     var radius: CGFloat = 0.0
     var colorIndex: Int = 0
     var color: UIColor = .red
@@ -15,21 +17,25 @@ class CircleView: UIView {
     
     var v: UIView!
     
-    var directionAngle: CGFloat = 0.0
-    var directionVelocity: CGFloat = 0.0
-    
-    convenience init(radius: CGFloat?, color: UIColor?) {
+    // MARK: -
+    convenience init(radius: CGFloat?, startVector: Vector, startOrigin: CGPoint, color: UIColor? = nil) {
         self.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         
-        self.colorIndex = Int(arc4random_uniform(UInt32(self.COLORS.count)))
+        self.directionVector = startVector
         
-        self.radius = radius != nil ? radius! : CGFloat(arc4random_uniform(10)*3+50)
+        // MARK: initial design
+        
+        // add color
+        self.colorIndex = Int(arc4random_uniform(UInt32(self.COLORS.count)))
         self.color = color != nil ? color! : COLORS[self.colorIndex]
         
-        self.frame.size = CGSize(width: self.radius*2, height: self.radius*2)
-        
+        self.radius = radius != nil ? radius! : CGFloat(arc4random_uniform(10)*3+50)
         self.layer.cornerRadius = self.frame.size.width/2
         self.clipsToBounds = false
+        
+        // MARK: initial location
+        self.frame.size = CGSize(width: self.radius*2, height: self.radius*2)
+        self.frame.origin = startOrigin
         
         self.setupCircle()
         
@@ -39,16 +45,11 @@ class CircleView: UIView {
         self.addSubview(v)
     }
     
-    func go(angle: CGFloat, velocity: CGFloat) {
-        self.directionAngle = angle
-        self.directionVelocity = self.radius + velocity * 10
-        animateViewInLine(self, angle: angle, speed: velocity)
-    }
     
     override func layoutSubviews() {
         self.v.frame.origin = CGPoint(x: self.frame.width/2 - 5, y: self.frame.height/2 - 5)
         
-        drawArrow(from: self.v.frame.origin + CGPoint(x: 5, y: 5), angle: self.directionAngle, velocity: self.directionVelocity)
+        drawArrow(from: self.v.frame.origin + CGPoint(x: 5, y: 5), angle: self.directionVector.angle, velocity: self.directionVector.length)
     }
     
     private func polar(alpha: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
@@ -68,25 +69,20 @@ class CircleView: UIView {
         layer.addSublayer(shapeLayer)
     }
     
-    func animateViewInLine(_ view: UIView, angle: CGFloat, speed: CGFloat) {
-        let distancePerStep = speed // You can adjust the factor to change the distance moved per step
-        var origin = view.frame.origin
-        let dx = distancePerStep * cos(angle)
-        let dy = -distancePerStep * sin(angle)
-        let animationDuration = 0.1
-        UIView.animate(withDuration: animationDuration, animations: {
-            origin.x += dx
-            origin.y += dy
-            view.frame.origin = origin
-        }, completion: { finished in
-            if finished {
-                self.animateViewInLine(view, angle: angle, speed: speed)
-            }
-        })
+    func render() {
+        let distancePerFrame = self.directionVector.length / 60
+        
+        var origin = self.frame.origin
+        let dx = distancePerFrame * cos(self.directionVector.angle)
+        let dy = -distancePerFrame * sin(self.directionVector.angle)
+        
+        origin.x += dx
+        origin.y += dy
+        self.frame.origin = origin
     }
-    
+
     func drawArrow(from: CGPoint, angle: CGFloat, velocity: CGFloat) {
-        let endPoint = endPoint(from: from, angle: angle, length: velocity)
+        let endPoint = endPoint(from: from, angle: angle, length: self.radius + velocity)
         
         drawLine(from: from, to: endPoint, color: .black, width: 2)
     }
@@ -108,15 +104,10 @@ class CircleView: UIView {
         shapeLayer.lineWidth = width
 
         // Add the shape layer to your view's layer
-        self.layer.insertSublayer(shapeLayer, at: 0)
-//        self.layer.addSublayer(shapeLayer)
+//        self.layer.insertSublayer(shapeLayer, at: 0)
+        self.layer.addSublayer(shapeLayer)
+        
     }
 
 
-}
-
-extension CGPoint {
-    static func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
-        return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
-    }
 }
