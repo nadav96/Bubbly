@@ -14,7 +14,6 @@ class CircleView: UIView {
     let COLORS: [UIColor] = [UIColor.red, UIColor.yellow, UIColor.purple, UIColor.black]
     
     var v: UIView!
-    var v2: UIView!
     
     var directionAngle: CGFloat = 0.0
     var directionSpeed: CGFloat = 0.0
@@ -40,12 +39,8 @@ class CircleView: UIView {
         
         self.v = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
         v.backgroundColor = .black
+        self.v.layer.cornerRadius = 5
         self.addSubview(v)
-        
-        self.v2 = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
-        v2.backgroundColor = .black
-        self.addSubview(v2)
-        
         
         print("SA: \(self.center)")
     }
@@ -59,7 +54,7 @@ class CircleView: UIView {
     override func layoutSubviews() {
         self.v.frame.origin = CGPoint(x: self.frame.width/2 - 5, y: self.frame.height/2 - 5)
         
-        self.v2.frame.origin = polar(alpha: self.directionAngle, radius: self.radius, offset: self.v.center + CGPoint(x: -5, y: -5))
+        drawArrow(from: self.v.frame.origin + CGPoint(x: 5, y: 5), angle: self.directionAngle, velocity: 300)
     }
     
     private func polar(alpha: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
@@ -94,6 +89,32 @@ class CircleView: UIView {
                 self.animateViewInLine(view, angle: angle, speed: speed)
             }
         })
+    }
+    
+    func drawArrow(from: CGPoint, angle: CGFloat, velocity: CGFloat) {
+        let endPoint = endPoint(from: from, angle: angle, length: velocity)
+        
+        drawLine(from: from, to: endPoint, color: .black, width: 2)
+    }
+
+    func endPoint(from startPoint: CGPoint, angle: CGFloat, length: CGFloat) -> CGPoint {
+        let dx = length * cos(angle)
+        let dy = -length * sin(angle)
+        return CGPoint(x: startPoint.x + dx, y: startPoint.y + dy)
+    }
+    
+    private func drawLine(from startPoint: CGPoint, to endPoint: CGPoint, color: UIColor, width: CGFloat) {
+        let path = UIBezierPath()
+        path.move(to: startPoint)
+        path.addLine(to: endPoint)
+
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.path = path.cgPath
+        shapeLayer.strokeColor = color.cgColor
+        shapeLayer.lineWidth = width
+
+        // Add the shape layer to your view's layer
+        self.layer.addSublayer(shapeLayer)
     }
 
 
