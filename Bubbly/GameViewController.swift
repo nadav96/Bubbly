@@ -15,11 +15,15 @@ class GameViewController: UIViewController {
         let numberOfCircles = 10
         
         for _ in 0..<numberOfCircles {
-            let circle = CircleView(radius: 50, color: nil)
-            view.addSubview(circle)
-            circle.frame.origin = CGPoint.random(in: self.view.bounds)
+            let randomRadius = Double.random(in: 10...50)
             let randomAngle = Double.random(in: 0...(2 * .pi))
-            circle.go(angle: randomAngle, radius: 3)
+            let randomVelocity = Double.random(in: 1...(5))
+            let randomStartingPoint = CGPoint.random(in: self.view.bounds)
+            
+            let circle = CircleView(radius: randomRadius, color: nil)
+            view.addSubview(circle)
+            circle.frame.origin = randomStartingPoint
+            circle.go(angle: randomAngle, velocity: randomVelocity)
         }
     }
    
