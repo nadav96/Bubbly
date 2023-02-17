@@ -32,7 +32,7 @@ class CircleView: UIView {
         
         // MARK: initial location
         self.frame.size = CGSize(width: self.circle.radius * 2, height: self.circle.radius * 2)
-        self.frame.origin = self.circle.center
+        self.center = self.circle.center
         
         self.setupCircle()
         
@@ -69,7 +69,7 @@ class CircleView: UIView {
     func render() {        
         self.circle.move()
 
-        self.frame.origin = self.circle.center
+        self.center = self.circle.center
     }
 
     func drawArrow(from: CGPoint, angle: CGFloat, velocity: CGFloat) {
