@@ -8,7 +8,11 @@
 import UIKit
 
 class GameViewController: UIViewController {
+    let numberOfCircles = 10
+    
     var circles: [CircleView] = []
+    var bounds: CGRect = .zero
+    var boundsView: UIView!
     
     var displayLink: CADisplayLink?
     var lastFrameTime: CFTimeInterval = 0.0
@@ -16,14 +20,22 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setBounds()
         
-        let numberOfCircles = 10
-        
-        let circles = generateNonOverlappingCircles(numberOfCircles)
+        let circles = generateNonOverlappingCircles(bounds: self.bounds, count: numberOfCircles)
         addCircleViews(circles: circles)
         
         displayLink = CADisplayLink(target: self, selector: #selector(gameLoop))
         displayLink?.add(to: .current, forMode: .default)
+    }
+    
+    private func setBounds() {
+        self.bounds = self.view.bounds.decreaseEqually(by: 60)
+        self.boundsView = UIView(frame: self.bounds)
+        self.view.addSubview(self.boundsView)
+        self.boundsView.backgroundColor = .red
+        self.boundsView.alpha = 0.5
+        
     }
     
     private func addCircleViews(circles: [Circle]) {
@@ -37,16 +49,7 @@ class GameViewController: UIViewController {
         }
     }
     
-    private func generateNonOverlappingCircles(_ count: Int) -> [Circle] {
-        let bounds = self.view.bounds.decreaseEqually(by: 60)
-        
-        let v = UIView(frame: bounds)
-        self.view.addSubview(v)
-        v.backgroundColor = .red
-        v.alpha = 0.5
-        
-        print(bounds, self.view.bounds)
-        
+    private func generateNonOverlappingCircles(bounds: CGRect, count: Int) -> [Circle] {
         var circles = [Circle]()
         
         while circles.count < count {
