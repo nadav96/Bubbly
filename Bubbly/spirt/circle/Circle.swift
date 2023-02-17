@@ -35,6 +35,41 @@ class Circle {
         center.y += dy
     }
     
+    // MARK: collision methods
+    
+    private func intersections(bounds: CGRect) -> [Edge] {
+        var intersections: [Edge] = []
+        
+        // check if center is inside
+        guard bounds.contains(self.center) else {
+            return intersections
+        }
+        
+        let extraRadius: CGFloat = 1
+        
+        // Check if the circle extends beyond any of the rect's edges
+        let minX = bounds.minX + self.radius + extraRadius
+        let minY = bounds.minY + self.radius + extraRadius
+        let maxX = bounds.maxX - self.radius - extraRadius
+        let maxY = bounds.maxY - self.radius - extraRadius
+        
+        if self.center.x <= minX {
+            intersections.append(.left)
+        }
+        else if self.center.x >= maxX {
+            intersections.append(.right)
+        }
+        
+        if self.center.y <= minY {
+            intersections.append(.top)
+        }
+        else if self.center.y >= maxY {
+            intersections.append(.bottom)
+        }
+        
+        return intersections
+    }
+    
     func collision(others: [Circle], spacing: CGFloat = 20) -> Bool {
         var overlaps = false
         
@@ -51,24 +86,13 @@ class Circle {
     }
     
     func collision(bounds: CGRect) -> Bool {
-        // check if center is inside
-        guard bounds.contains(self.center) else {
-            return true
+        let inter = intersections(bounds: bounds)
+        
+        // TODO: remove block
+        if inter.count > 0 {
+            print(inter)
         }
         
-        let extraRadius: CGFloat = 1
-        
-        // Check if the circle extends beyond any of the rect's edges
-        let minX = bounds.minX + self.radius + extraRadius
-        let minY = bounds.minY + self.radius + extraRadius
-        let maxX = bounds.maxX - self.radius - extraRadius
-        let maxY = bounds.maxY - self.radius - extraRadius
-        
-        guard self.center.x >= minX && self.center.x <= maxX && self.center.y >= minY && self.center.y <= maxY else {
-            return true
-        }
-        
-        
-        return false
+        return inter.count > 0
     }
 }
