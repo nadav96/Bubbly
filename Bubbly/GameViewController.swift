@@ -10,7 +10,7 @@ import UIKit
 class GameViewController: UIViewController {
     let MAX_CIRCLE_CREATION_ATTEMPTS = 30
     
-    let numberOfCircles = 10
+    let numberOfCircles = 4
     
     var circles: [CircleView] = []
     var bounds: CGRect = .zero
@@ -20,6 +20,8 @@ class GameViewController: UIViewController {
     var lastFrameTime: CFTimeInterval = 0.0
     let targetFrameDuration = 1.0 / 60.0 // 60fps
     
+    var isGameRunning = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setBounds()
@@ -27,8 +29,16 @@ class GameViewController: UIViewController {
         let circles = generateNonOverlappingCircles(bounds: self.bounds, count: numberOfCircles)
         addCircleViews(circles: circles)
         
+        self.start()
+    }
+    
+    func start() {
         displayLink = CADisplayLink(target: self, selector: #selector(gameLoop))
         displayLink?.add(to: .current, forMode: .default)
+    }
+    
+    func stop() {
+        self.displayLink?.invalidate()
     }
     
     private func setBounds() {
@@ -82,6 +92,10 @@ class GameViewController: UIViewController {
 
     
     @objc func gameLoop(_ displayLink: CADisplayLink) {
+        if !isGameRunning {
+            self.stop()
+        }
+
         let currentTime = displayLink.timestamp
         let elapsedTime = currentTime - lastFrameTime
 
@@ -97,6 +111,11 @@ class GameViewController: UIViewController {
         for circle in circles {
             if circle.circle.collision(bounds: self.bounds) {
                 circle.circle.bounce(bounds: self.bounds)
+            }
+            
+            let others = self.circles.compactMap({ (circle == $0) || (circle.colorIndex != $0.colorIndex) ? nil : $0.circle })
+            if circle.circle.collision(others: others, spacing: 0) {
+                self.isGameRunning = false
             }
         }
     }

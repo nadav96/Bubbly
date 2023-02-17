@@ -50,10 +50,7 @@ class CircleView: UIView {
         addGestureRecognizer(tapGesture)
     }
     
-    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-        // Handle the tap here
-        print("Circle tapped!")
-        
+    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {        
         self.colorIndex = (self.colorIndex + 1) % self.COLORS.count
         self.color = self.COLORS[self.colorIndex]
         
@@ -86,14 +83,18 @@ class CircleView: UIView {
 
         self.center = self.circle.center
     }
+    
+    func isSameColor(other: CircleView) -> Bool {
+        return self.colorIndex == other.colorIndex
+    }
 
-    func drawArrow(from: CGPoint, angle: CGFloat, velocity: CGFloat) {
+    private func drawArrow(from: CGPoint, angle: CGFloat, velocity: CGFloat) {
         let endPoint = endPoint(from: from, angle: angle, length: self.circle.radius + velocity)
         
         drawLine(from: from, to: endPoint, color: .black, width: 2)
     }
 
-    func endPoint(from startPoint: CGPoint, angle: CGFloat, length: CGFloat) -> CGPoint {
+    private func endPoint(from startPoint: CGPoint, angle: CGFloat, length: CGFloat) -> CGPoint {
         let dx = length * cos(angle)
         let dy = -length * sin(angle)
         return CGPoint(x: startPoint.x + dx, y: startPoint.y + dy)
