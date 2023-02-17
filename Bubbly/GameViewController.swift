@@ -94,16 +94,18 @@ class GameViewController: UIViewController {
     }
     
     func updateGameState() {
-        
+        for circle in circles {
+            if circle.circle.collision(bounds: self.bounds) {
+                circle.circle.bounce(bounds: self.bounds)
+            }
+        }
     }
 
     func render() {
         // Render the game graphics here
         
         for circle in circles {
-            if !circle.circle.collision(bounds: self.bounds) {
-                circle.render()
-            }
+            circle.render()
         }
     }
    

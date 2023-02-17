@@ -28,4 +28,8 @@ class Vector {
     func reverse() -> Vector {
         return Vector(angle: angle + .pi, length: length)
     }
+    
+    static prefix func - (vector: Vector) -> Vector {
+        return Vector(angle: vector.angle + .pi, length: vector.length)
+    }
 }

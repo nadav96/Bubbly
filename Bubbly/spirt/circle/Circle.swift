@@ -54,17 +54,17 @@ class Circle {
         let maxY = bounds.maxY - self.radius - extraRadius
         
         if self.center.x <= minX {
-            intersections.append(.left)
+            intersections.append(.left(p: CGPoint(x: minX, y: self.center.y)))
         }
         else if self.center.x >= maxX {
-            intersections.append(.right)
+            intersections.append(.right(p: CGPoint(x: maxX, y: self.center.y)))
         }
         
         if self.center.y <= minY {
-            intersections.append(.top)
+            intersections.append(.top(p: CGPoint(x: self.center.x, y: minY)))
         }
         else if self.center.y >= maxY {
-            intersections.append(.bottom)
+            intersections.append(.bottom(p: CGPoint(x: self.center.x, y: maxY)))
         }
         
         return intersections
@@ -94,5 +94,9 @@ class Circle {
         }
         
         return inter.count > 0
+    }
+    
+    func bounce(bounds: CGRect) {
+        self.vector = -self.vector
     }
 }

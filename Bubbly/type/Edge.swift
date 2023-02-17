@@ -8,8 +8,8 @@
 import Foundation
 
 enum Edge {
-    case top
-    case bottom
-    case left
-    case right
+    case top(p: CGPoint)
+    case bottom(p: CGPoint)
+    case left(p: CGPoint)
+    case right(p: CGPoint)
 }
