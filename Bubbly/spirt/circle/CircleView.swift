@@ -8,34 +8,31 @@
 import UIKit
 
 class CircleView: UIView {
-    var directionVector: Vector = .zero
+    let COLORS: [UIColor] = [UIColor.red, UIColor.yellow, UIColor.purple]
     
-    var radius: CGFloat = 0.0
+    var circle: Circle = .zero
+    
     var colorIndex: Int = 0
     var color: UIColor = .red
-    let COLORS: [UIColor] = [UIColor.red, UIColor.yellow, UIColor.purple]
     
     var v: UIView!
     
     // MARK: -
-    convenience init(radius: CGFloat?, startVector: Vector, startOrigin: CGPoint, color: UIColor? = nil) {
+    convenience init(circle: Circle, color: UIColor? = nil) {
         self.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         
-        self.directionVector = startVector
-        
-        // MARK: initial design
+        self.circle = circle
         
         // add color
         self.colorIndex = Int(arc4random_uniform(UInt32(self.COLORS.count)))
         self.color = color != nil ? color! : COLORS[self.colorIndex]
         
-        self.radius = radius != nil ? radius! : CGFloat(arc4random_uniform(10)*3+50)
         self.layer.cornerRadius = self.frame.size.width/2
         self.clipsToBounds = false
         
         // MARK: initial location
-        self.frame.size = CGSize(width: self.radius*2, height: self.radius*2)
-        self.frame.origin = startOrigin
+        self.frame.size = CGSize(width: self.circle.radius * 2, height: self.circle.radius * 2)
+        self.frame.origin = self.circle.center
         
         self.setupCircle()
         
@@ -49,7 +46,7 @@ class CircleView: UIView {
     override func layoutSubviews() {
         self.v.frame.origin = CGPoint(x: self.frame.width/2 - 5, y: self.frame.height/2 - 5)
         
-        drawArrow(from: self.v.frame.origin + CGPoint(x: 5, y: 5), angle: self.directionVector.angle, velocity: self.directionVector.length)
+        drawArrow(from: self.v.frame.origin + CGPoint(x: 5, y: 5), angle: self.circle.vector.angle, velocity: self.circle.vector.length)
     }
     
     private func polar(alpha: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
@@ -70,11 +67,11 @@ class CircleView: UIView {
     }
     
     func render() {
-        let distancePerFrame = self.directionVector.length / 60
+        let distancePerFrame = self.circle.vector.length / 60
         
         var origin = self.frame.origin
-        let dx = distancePerFrame * cos(self.directionVector.angle)
-        let dy = -distancePerFrame * sin(self.directionVector.angle)
+        let dx = distancePerFrame * cos(self.circle.vector.angle)
+        let dy = -distancePerFrame * sin(self.circle.vector.angle)
         
         origin.x += dx
         origin.y += dy
@@ -82,7 +79,7 @@ class CircleView: UIView {
     }
 
     func drawArrow(from: CGPoint, angle: CGFloat, velocity: CGFloat) {
-        let endPoint = endPoint(from: from, angle: angle, length: self.radius + velocity)
+        let endPoint = endPoint(from: from, angle: angle, length: self.circle.radius + velocity)
         
         drawLine(from: from, to: endPoint, color: .black, width: 2)
     }

@@ -12,6 +12,8 @@ class Circle {
     public let radius: CGFloat
     public var vector: Vector
     
+    public static let zero = Circle(radius: 0, vector: .zero)
+    
     /// Creates a circle object with a given radius and center, and if center is null, set it as zero
     init(radius: CGFloat, vector: Vector, center: CGPoint? = nil) {
         self.center = center ?? .zero

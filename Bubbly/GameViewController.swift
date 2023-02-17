@@ -42,7 +42,7 @@ class GameViewController: UIViewController {
     
     private func addCircleViews(circles: [Circle]) {
         for circle in circles {
-            let c = CircleView(radius: circle.radius, startVector: circle.vector, startOrigin: circle.center)
+            let c = CircleView(circle: circle)
             view.addSubview(c)
             
             self.circles.append(c)
@@ -55,6 +55,7 @@ class GameViewController: UIViewController {
         var circles = [Circle]()
         
         while circles.count < count {
+            // TODO: ? Double.random(in: 10...50) -> CGFloat(arc4random_uniform(10)*3+50)
             let randomRadius = Double.random(in: 10...50)
             
             let circle = Circle(radius: randomRadius, vector: Vector.random())
