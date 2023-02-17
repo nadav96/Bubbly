@@ -51,6 +51,24 @@ class Circle {
     }
     
     func collision(bounds: CGRect) -> Bool {
-        return !bounds.contains(self.center)
+        // check if center is inside
+        guard bounds.contains(self.center) else {
+            return true
+        }
+        
+        let extraRadius: CGFloat = 1
+        
+        // Check if the circle extends beyond any of the rect's edges
+        let minX = bounds.minX + self.radius + extraRadius
+        let minY = bounds.minY + self.radius + extraRadius
+        let maxX = bounds.maxX - self.radius - extraRadius
+        let maxY = bounds.maxY - self.radius - extraRadius
+        
+        guard self.center.x >= minX && self.center.x <= maxX && self.center.y >= minY && self.center.y <= maxY else {
+            return true
+        }
+        
+        
+        return false
     }
 }
