@@ -19,6 +19,7 @@
 		2632C23B299FD2FD00500D11 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632C23A299FD2FD00500D11 /* Circle.swift */; };
 		2632C23D299FD70300500D11 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632C23C299FD70300500D11 /* CGRect.swift */; };
 		2632C240299FEE4B00500D11 /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632C23F299FEE4B00500D11 /* Edge.swift */; };
+		2632C24329A0D93900500D11 /* CountDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632C24229A0D93900500D11 /* CountDown.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		2632C23A299FD2FD00500D11 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		2632C23C299FD70300500D11 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
 		2632C23F299FEE4B00500D11 /* Edge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Edge.swift; sourceTree = "<group>"; };
+		2632C24229A0D93900500D11 /* CountDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDown.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 		2606394C29999EAC00F3B5D5 /* spirt */ = {
 			isa = PBXGroup;
 			children = (
+				2632C24129A0D92E00500D11 /* countdown */,
 				2632C239299FD2F000500D11 /* circle */,
 			);
 			path = spirt;
@@ -123,6 +126,14 @@
 				2632C23F299FEE4B00500D11 /* Edge.swift */,
 			);
 			path = type;
+			sourceTree = "<group>";
+		};
+		2632C24129A0D92E00500D11 /* countdown */ = {
+			isa = PBXGroup;
+			children = (
+				2632C24229A0D93900500D11 /* CountDown.swift */,
+			);
+			path = countdown;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,6 +214,7 @@
 				2606393829999D6600F3B5D5 /* AppDelegate.swift in Sources */,
 				2632C238299FD0A300500D11 /* CGPoint.swift in Sources */,
 				2606393A29999D6600F3B5D5 /* SceneDelegate.swift in Sources */,
+				2632C24329A0D93900500D11 /* CountDown.swift in Sources */,
 				2632C23D299FD70300500D11 /* CGRect.swift in Sources */,
 				2632C240299FEE4B00500D11 /* Edge.swift in Sources */,
 			);

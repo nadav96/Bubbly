@@ -28,17 +28,35 @@ class GameViewController: UIViewController {
     @IBOutlet weak var gameContainerView: UIView!
     @IBOutlet weak var countdownLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
+    @IBOutlet weak var personalBestLabel: UILabel!
     
     var frames: Int = 0
+    
+    var countdown = CountDown()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setBounds()
         
+        self.durationLabel.text = "00:00"
+        
         let circles = generateNonOverlappingCircles(bounds: self.bounds, count: numberOfCircles)
         addCircleViews(circles: circles)
         
-        self.start()
+        self.view.bringSubviewToFront(self.countdownLabel)
+        
+        self.countdown.start { step in
+            print(step)
+            self.countdownLabel.text = "\(step)"
+        } doneCallback: {
+            self.boundsView.backgroundColor = .red
+            self.boundsView.alpha = 0.5
+            
+            self.durationLabel.isHidden = true
+            self.start()
+        }
+
+        
     }
     
     func start() {
@@ -72,8 +90,6 @@ class GameViewController: UIViewController {
         self.bounds = self.gameContainerView.frame
         self.boundsView = UIView(frame: self.gameContainerView.bounds)
         self.gameContainerView.addSubview(self.boundsView)
-//        self.boundsView.backgroundColor = .red
-//        self.boundsView.alpha = 0.5
         
     }
     
