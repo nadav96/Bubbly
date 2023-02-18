@@ -17,6 +17,10 @@ class CircleView: UIView {
     
     var v: UIView!
     
+    let arrowLayer = CAShapeLayer()
+    
+    var isArrowEnabled = true
+    
     // MARK: -
     convenience init(circle: Circle, color: UIColor? = nil) {
         self.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -56,9 +60,12 @@ class CircleView: UIView {
         
         self.setupCircle()
     }
-    
+    var step = 0
     override func layoutSubviews() {
         self.v.frame.origin = CGPoint(x: self.frame.width/2 - 5, y: self.frame.height/2 - 5)
+        if self.isArrowEnabled {
+            self.drawArrow(from: self.v.frame.origin + CGPoint(x: 5, y: 5), angle: self.circle.vector.angle, velocity: self.circle.vector.length)
+        }
     }
     
     private func polar(alpha: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
@@ -84,6 +91,11 @@ class CircleView: UIView {
         self.center = self.circle.center
     }
     
+    func removeArrow() {
+        self.arrowLayer.removeFromSuperlayer()
+        self.isArrowEnabled = false
+    }
+    
     func isSameColor(other: CircleView) -> Bool {
         return self.colorIndex == other.colorIndex
     }
@@ -105,15 +117,12 @@ class CircleView: UIView {
         path.move(to: startPoint)
         path.addLine(to: endPoint)
 
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.path = path.cgPath
-        shapeLayer.strokeColor = color.cgColor
-        shapeLayer.lineWidth = width
+        self.arrowLayer.path = path.cgPath
+        self.arrowLayer.strokeColor = color.cgColor
+        self.arrowLayer.lineWidth = width
 
         // Add the shape layer to your view's layer
-//        self.layer.insertSublayer(shapeLayer, at: 0)
-        self.layer.addSublayer(shapeLayer)
-        
+        self.layer.addSublayer(self.arrowLayer)
     }
 
 

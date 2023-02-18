@@ -52,7 +52,11 @@ class GameViewController: UIViewController {
             self.boundsView.backgroundColor = .red
             self.boundsView.alpha = 0.5
             
-            self.durationLabel.isHidden = true
+            for circle in self.circles {
+                circle.removeArrow()
+            }
+            
+            self.countdownLabel.isHidden = true
             self.start()
         }
 
